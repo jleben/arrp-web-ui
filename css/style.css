@@ -15,6 +15,11 @@ body { margin: 0px }
   color: #ffffff
 }
 
+#header a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
 #header #menu-intro {
   display: inline;
 }
@@ -28,10 +33,10 @@ body { margin: 0px }
   padding: 10px;
   font-size: 26;
   list-style-type: none;
+  color: #ccccff;
 }
 
 #header #menu li { display: inline; margin: 10px }
-#header #menu li a { text-decoration: none; color: #ccccff }
 
 #page {
   padding: 10px;
