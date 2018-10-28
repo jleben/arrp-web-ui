@@ -84,6 +84,10 @@ body { margin: 0px }
   width: 100%;
 }
 
+#cpp-code {
+  width: 100%;
+}
+
 .bigger {
   font-family: 'Share Tech', sans-serif;
   font-size: 16pt;

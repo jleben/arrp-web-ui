@@ -116,7 +116,7 @@ function selectExample() {
   document.getElementById("arrp-input").value = code;
 }
 
-function sendArrpInput(post_url) {
+function sendArrpInput() {
 
   var text = document.getElementById("arrp-input").value;
 
@@ -124,10 +124,13 @@ function sendArrpInput(post_url) {
 
   var out_count = document.getElementById("out-count").value;
 
+  var post_url = "http://" + location.hostname + ":8002";
+
   var xmlhttp = new XMLHttpRequest();
 
   console.log("Posting...\n");
 
+  xmlhttp.responseType = 'json';
   xmlhttp.onreadystatechange = function() {
       console.log("State change: " + xmlhttp.readyState);
       if (xmlhttp.readyState != 4) {
@@ -139,16 +142,52 @@ function sendArrpInput(post_url) {
                   + xmlhttp.responseText;
           document.getElementById("arrp-output").value = msg;
       }
+      else if (xmlhttp.responseType != "json") {
+          var msg = "Received unexpected response type: " + xmlhttp.responseType + '\n';
+          document.getElementById("arrp-output").value = msg;
+      }
       else {
-          processArrpResponse(xmlhttp.responseText);
+          processArrpResponse(xmlhttp.response);
       }
   };
   xmlhttp.open("POST", post_url + "?out_count=" + out_count, true);
   xmlhttp.send(data);
   document.getElementById("arrp-output").value = "Waiting for response...";
+  document.getElementById("cpp-code").value = "Waiting for response...";
 }
 
-function processArrpResponse(text) {
-    console.log("Reponse:\n" + text);
-    document.getElementById("arrp-output").value = text;
+function decodeResponse(field) {
+    if (field)
+        return atob(field)
+    else
+        return null;
+}
+
+function processArrpResponse(json) {
+    var error = json.error
+    var arrp_compiler_log = decodeResponse(json.arrp_compiler)
+    var cpp_source = decodeResponse(json.cpp)
+    var cpp_compiler_log = decodeResponse(json.cpp_compiler_log)
+    var program_out = decodeResponse(json.output)
+
+    if (error) {
+        var msg = "There was a problem: " + error + '\n';
+        if (arrp_compiler_log) {
+            msg += "\nArrp compiler output: \n";
+            msg += arrp_compiler_log;
+            msg += '\n'
+        }
+        if (cpp_compiler_log) {
+            msg += "\nC++ compiler output: \n";
+            msg += cpp_compiler_log;
+            msg += '\n'
+        }
+        document.getElementById("arrp-output").value = msg;
+    }
+    else
+    {
+        document.getElementById("arrp-output").value = program_out;
+    }
+
+    document.getElementById("cpp-code").value = cpp_source;
 }
