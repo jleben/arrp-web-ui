@@ -124,7 +124,7 @@ function sendArrpInput() {
 
   var out_count = document.getElementById("out-count").value;
 
-  var post_url = "http://" + location.hostname + ":8002";
+  var post_url = "http://" + location.hostname + "/playground/request";
 
   var xmlhttp = new XMLHttpRequest();
 
