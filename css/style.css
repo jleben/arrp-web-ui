@@ -98,6 +98,10 @@ body { margin: 0px }
   font-size: 16pt;
 }
 
+.citation {
+  margin-bottom: 2em;
+}
+
 .citation p {
-  margin: 2px;
+  margin: 0.1em;
 }
